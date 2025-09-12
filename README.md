@@ -131,3 +131,11 @@
    ```bash
    python3 odoo-bin -c ~/odoo/odoo15/custom/configs/odoo.conf -d odoodb --init=base
     ```
+
+   ## Run Odoo
+   Open your browser and go to:
+   http://localhost:8069
+   If the interface loads, your Odoo 15 setup is complete!
+---
+Note for me:
+interpreter, edit configuration and path copy paste part!
