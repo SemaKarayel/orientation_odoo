@@ -58,16 +58,17 @@
 
 5. (Optional) – Your Odoo Addons Repo on GitHub
 
-    If you want, you can clone your project repository to track your Odoo.
+   > If you want, you can clone your project repository to track your Odoo.  
+   > Copy your **addons path**: `~/odoo/odoo15/odoo/addons`  
+   > And update your **addons_path** in the `odoo.conf` file.
 
-    Copy Path your **addons path** `~/odoo/odoo15/odoo/addons`
-
-    And update your **addons_path** in `odoo.conf` file:
-
-    ```zsh
-    cd ~/odoo/odoo15/custom
-    git clone git@github.com:<your-username>/<your-repo>.git
-    ```
+   ```zsh
+   cd ~/odoo/odoo15/custom
+   git clone git@github.com:<your-username>/<your-repo>.git
+   ```
+   
+   >    **Note:** Anything inside `< >` (angle brackets) is a placeholder.  
+   >    Replace it with your own values.
    
 6. Install PostgreSQL
 
