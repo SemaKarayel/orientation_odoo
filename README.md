@@ -141,5 +141,6 @@ If the interface loads, your Odoo 15 setup is complete!
 
 After you have set up everything, you can start Odoo by running the following command in your terminal:
 ```zsh
+  cd ~/odoo/odoo15/odoo
   python3 odoo-bin -c ~/odoo/odoo15/custom/configs/odoo.conf
 ```
