@@ -2,10 +2,12 @@
     'name': 'Hospital Management',
     'version': '1.0.0',
     'category': 'Hospital',
+    'sequence': -100,
     'summary': 'Hospital Management System',
     'description': """Hospital Management System""",
     'depends': ['base'],
     'data': [
+        'security/ir.model.access.csv',
         'views/patient_view.xml',
         'views/menu.xml',
     ],
