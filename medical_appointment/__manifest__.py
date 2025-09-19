@@ -5,11 +5,13 @@
     'sequence': -100,
     'summary': 'Hospital Management System',
     'description': """Hospital Management System""",
-    'depends': ['base'],
+    'depends': ['mail'],
     'data': [
         'security/ir.model.access.csv',
-        'views/patient_view.xml',
         'views/menu.xml',
+        'views/patient_view.xml',
+        'views/female_patient_view.xml',
+        'views/male_patient_view.xml'
     ],
     'demo': [],
     'installable': True,
