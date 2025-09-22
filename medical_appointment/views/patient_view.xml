@@ -8,9 +8,10 @@
             <tree>
                 <field name="patient_id"/>
                 <field name="full_name"/>
+                <field name="ref"/>
+                <field name="age"/>
                 <field name="gender"/>
                 <field name="date_of_birth"/>
-                <field name="age"/>
                 <field name="phone"/>
                 <field name="email"/>
             </tree>
@@ -31,11 +32,13 @@
                             <field name="first_name"/>
                             <field name="last_name"/>
                             <field name="full_name"/>
-                            <field name="gender"/>
                             <field name="date_of_birth"/>
+                            <field name="age"/>
+                            <field name="appointment_id"/>
                         </group>
                         <group>
-                            <field name="age"/>
+                            <field name="ref"/>
+                            <field name="gender"/>
                             <field name="active" invisible="1"/>
                             <field name="address"/>
                             <field name="phone"/>
