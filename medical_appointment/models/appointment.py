@@ -11,7 +11,7 @@ class HospitalAppointment(models.Model):
     patient_id = fields.Many2one('hospital.patient', string='Patient')
     gender = fields.Selection(related='patient_id.gender')
     booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
-    ref = fields.Char(string='Refere nce', help="Reference from patient record.")
+    ref = fields.Char(string='Reference', help="Reference from patient record.")
     prescription = fields.Html(string='Prescription')
     priority = fields.Selection([
         ('0', 'Normal'),
@@ -24,6 +24,8 @@ class HospitalAppointment(models.Model):
         ('done', 'Done'),
         ('cancel', ' Cancelled')], default='draft', string='Status', required=True)
     doctor_id = fields.Many2one('res.users', string='Doctor', tracking=True)
+    pharmacy_line_ids = fields.One2many('appointment.pharmacy.lines', 'appointment_id', string='Pharmacy Lines')
+    hide_sales_price = fields.Boolean(string='Hide Sales Price')
 
     @api.onchange('patient_id')
     def onchange_patient_id(self):
@@ -56,10 +58,12 @@ class HospitalAppointment(models.Model):
         for rec in self:
             rec.state = 'draft'
 
+
 class AppointmentPharmacyLines(models.Model):
     _name = 'appointment.pharmacy.lines'
     _description = 'Appointment Pharmacy Lines'
 
-    product_id = fields.Many2one('product.product')
-    price_unit = fields.Float(string='Price')
+    product_id = fields.Many2one('product.product', required=True)
+    price_unit = fields.Float(related='product_id.list_price')
     qty = fields.Integer(string='Quantity')
+    appointment_id = fields.Many2one('hospital.appointment', string='Appointment')
