@@ -49,4 +49,8 @@ class HospitalPatient(models.Model):
             else:
                 rec.age = 0
 
+    # unique national ID no constraint
+    _sql_constraints = [
+        ('national_id_no_unique', 'unique(national_id_no)', 'National ID number must be unique.')
+    ]
 
