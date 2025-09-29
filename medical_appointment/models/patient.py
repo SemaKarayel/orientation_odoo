@@ -14,25 +14,30 @@ class HospitalPatient(models.Model):
     last_name = fields.Char('Last Name', required=True, tracking=True)
     full_name = fields.Char(string='Full Name', compute='_compute_full_name', store=True, tracking=True)
     date_of_birth = fields.Date(string='Date of Birth', tracking=True)
+    ref = fields.Char(string='Reference')
     age = fields.Integer(string='Age', compute='_compute_age', readonly=True, tracking=True)
+    gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string='Gender', tracking=True,
+                              default='female')
+
+    active = fields.Boolean('Active', default=True)
     address = fields.Text('Address', tracking=True)
     phone = fields.Char(string='Phone', tracking=True)
     email = fields.Char(string='Email', tracking=True)
     national_id_no = fields.Char(string='National ID No', tracking=True)
-    gender = fields.Selection([('male','Male'), ('female','Female')], string='Gender', tracking=True, default='female')
-    active = fields.Boolean('Active', default=True)
-    ref = fields.Char(string='Reference')
+    image = fields.Image(string='Image')
+
+    # Relations
+    tag_ids = fields.Many2many('patient.tag', string='Tags')
     appointment_id = fields.Many2one('hospital.appointment', string='Appointments')
 
 
-    # compute full name
+    # Compute full name
     @api.depends('first_name', 'last_name')
     def _compute_full_name(self):
         for rec in self:
             rec.full_name = f"{rec.first_name} {rec.last_name}"
 
-
-    # compute age
+    # Compute age
     @api.depends('date_of_birth')
     def _compute_age(self):
         for rec in self:
@@ -45,13 +50,3 @@ class HospitalPatient(models.Model):
                 rec.age = 0
 
 
-    # Auto calculate age when user enter date of birth using onchange decorator
-    @api.onchange('date_of_birth')
-    def _onchange_date_of_birth(self):
-        if self.date_of_birth:
-            today = date.today()
-            self.age = today.year - self.date_of_birth.year - (
-                ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
-            )
-        else:
-            self.age = 0

@@ -26,6 +26,7 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
                     <group>
                         <group>
                             <field name="patient_id"/>
@@ -39,6 +40,7 @@
                         <group>
                             <field name="ref"/>
                             <field name="gender"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             <field name="active" invisible="1"/>
                             <field name="address"/>
                             <field name="phone"/>
