@@ -15,5 +15,10 @@
               parent="menu_hospital_root"
               sequence="20"/>
 
+    <menuitem id="menu_configuration"
+              name="Configurations"
+              parent="menu_hospital_root"
+              sequence="10"/>
+
 </odoo>
 
