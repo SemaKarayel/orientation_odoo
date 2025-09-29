@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<!--
-    decoration-success = GREEN
-    decoration-info = LIGHT BLUE
-    decoration-danger = RED
-    decoration-warning = YELLOW
-    decoration-muted = GREY
--->
+    <!--
+        decoration-success = GREEN
+        decoration-info = LIGHT BLUE
+        decoration-danger = RED
+        decoration-warning = YELLOW
+        decoration-muted = GREY
+    -->
+
+
+    <!-- Activity view -->
+    <record id="view_hospital_appointment_activity" model="ir.ui.view">
+        <field name="name">hospital.appointment.activity</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <activity string="Appointments">
+                <field name="patient_id"/>
+                <field name="ref"/>
+                <templates>
+                    <div t-name="activity-box">
+                        <img t-att-src="activity_image('hospital.patient', 'image', record.patient_id.raw_value)"
+                             t-att-title="record.patient_id.value" t-att-alt="record.patient_id.value"/>
+                        <div>
+                            <field name="ref" display="full"/>
+                        </div>
+                    </div>
+                </templates>
+            </activity>
+        </field>
+    </record>
+
     <!-- Tree view -->
     <record id="view_hospital_appointment_tree" model="ir.ui.view">
         <field name="name">hospital.appointment.tree</field>
@@ -54,7 +77,7 @@
                             type="object" states="cancel"/>
                     <!--options="{'clickable': '1'}"-->
                     <field name="state" widget="statusbar" nolabel="1"
-                            statusbar_visible="draft,in_consultation,done"/>
+                           statusbar_visible="draft,in_consultation,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -71,14 +94,17 @@
                             <field name="booking_date" help="Date of booking" default_focus="1"/>
                         </group>
                         <group>
+                            <field name="hide_sales_price" groups="base.group_no_one"/>
                             <field name="appointment_time"/>
                             <button name="action_test" string="Object Button" type="object"
                                     data-hotkey="i"
                                     help="A message will be printed in the log "
+                                    groups="base.group_no_one"
                                     confirm="Are you sure to execute python code ?"
                                     class="oe_highlight"/>
                             <button name="%(medical_appointment.action_hospital_patient)d " string="Action Button"
                                     help="On clicking this button, you will be redirected to patient records."
+                                    groups="base.group_no_one"
                                     confirm="Are you sure to open the patient action ?"
                                     data-hotkey="j"
                                     type="action" class="oe_highlight"/>
@@ -88,9 +114,27 @@
                     <notebook>
                         <page string="Prescription" name="prescription">
                             <field name="prescription" placeholder="Enter your prescription"
-                            options="{'collaborative': true, 'resizable': true}"/>
+                                   options="{'collaborative': true, 'resizable': true}"/>
                         </page>
+
+                        <!-- Tree and Form view for pharmacy lines -->
                         <page string="Pharmacy" name="pharmacy">
+                            <field name="pharmacy_line_ids">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="price_unit"
+                                           attrs="{'column_invisible':[('parent.hide_sales_price', '=', True)]}"/>
+                                    <field name="qty"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="product_id"/>
+                                        <field name="price_unit"
+                                               attrs="{'column_invisible':[('parent.hide_sales_price', '=', True)]}"/>
+                                        <field name="qty"/>
+                                    </group>
+                                </form>
+                            </field>
                         </page>
                     </notebook>
 
@@ -119,7 +163,7 @@
         <field name="name">Appointment</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hospital.appointment</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,activity</field>
         <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
