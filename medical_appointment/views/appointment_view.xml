@@ -114,7 +114,7 @@
                     <notebook>
                         <page string="Prescription" name="prescription">
                             <field name="prescription" placeholder="Enter your prescription"
-                                   options="{'collaborative': true, 'resizable': true}"/>
+                                   options="{'collaborative': true, 'resizable': true, 'codeview': true}"/>
                         </page>
 
                         <!-- Tree and Form view for pharmacy lines -->
