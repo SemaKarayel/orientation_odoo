@@ -64,10 +64,10 @@
                             type="object" states="draft"/>
                     <button name="action_set_done" string="Mark as Done" class="oe_highlight"
                             data-hotkey="v"
-                            type="object" states="in_consultation"/>
+                            type="object" states="in_progress"/>
                     <button name="action_set_cancel" string="Cancel"
                             data-hotkey="z"
-                            type="object" states="draft,in_consultation"/>
+                            type="object" states="draft,in_progress"/>
                     <button name="action_set_draft" string="Reset to Draft" class="oe_highlight"
                             data-hotkey="n"
                             type="object" states="cancel"/>
