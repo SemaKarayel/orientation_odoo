@@ -20,5 +20,14 @@
               parent="menu_hospital_root"
               sequence="10"/>
 
+    <menuitem id="menu_doctor_master"
+              name="Doctors"
+              parent="menu_hospital_root"
+              sequence="0"/>
+
+    <menuitem id="menu_department_master"
+              name="Departments"
+              parent="menu_hospital_root"
+              sequence="0"/>
 </odoo>
 

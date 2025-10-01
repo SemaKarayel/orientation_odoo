@@ -11,9 +11,10 @@
         'views/menu.xml',
         'views/patient_view.xml',
         'views/female_patient_view.xml',
-        'views/male_patient_view.xml',
         'views/appointment_view.xml',
-        'views/patient_tag_view.xml'
+        'views/doctor_view.xml',
+        'views/department_view.xml',
+        'views/treatment_view.xml'
     ],
     'demo': [],
     'installable': True,
