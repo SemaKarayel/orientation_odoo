@@ -1,35 +1,46 @@
 from odoo import models, fields, api
 
+
 class HospitalAppointment(models.Model):
     _name = 'hospital.appointment'
     _description = 'Hospital Appointment'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _rec_name = 'ref'
+    _rec_name = 'full_name'
 
     # fields
+    code = fields.Char(string='Code', required=True, copy=False, readonly=True, default=lambda self: 'New')
+    full_name = fields.Char(string='Full Name', compute='_compute_full_name', store=True, tracking=True)
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)
+    doctor_ids = fields.Many2many('hospital.doctor', string='Doctors')
     patient_id = fields.Many2one('hospital.patient', string='Patient')
-    gender = fields.Selection(related='patient_id.gender')
-    booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
-    ref = fields.Char(string='Reference', help="Reference from patient record.")
-    prescription = fields.Html(string='Prescription')
+    stage = fields.Selection([
+        ('draft', 'Draft'),
+        ('in_progress', 'In Progress'),
+        ('done', 'Done'),
+        ('cancel', ' Cancelled')], default='draft', string='Stage', required=True, tracking=True)
+    treatment_ids = fields.One2many('hospital.treatment', 'appointment_id', string='Treatments')
     priority = fields.Selection([
         ('0', 'Normal'),
         ('1', 'Low'),
         ('2', 'High'),
         ('3', 'Very High')], string='Priority')
-    state = fields.Selection([
-        ('draft', 'Draft'),
-        ('in_consultation', 'In Consultation'),
-        ('done', 'Done'),
-        ('cancel', ' Cancelled')], default='draft', string='Status', required=True)
-    doctor_id = fields.Many2one('res.users', string='Doctor', tracking=True)
+    gender = fields.Selection(related='patient_id.gender')
+    booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
+    prescription = fields.Html(string='Prescription')
     pharmacy_line_ids = fields.One2many('appointment.pharmacy.lines', 'appointment_id', string='Pharmacy Lines')
     hide_sales_price = fields.Boolean(string='Hide Sales Price')
 
-    @api.onchange('patient_id')
-    def onchange_patient_id(self):
-        self.ref = self.patient_id.ref
+    # Compute full name using patient
+    @api.depends('patient_id.full_name')
+    def _compute_full_name(self):
+        for rec in self:
+            rec.full_name = rec.patient_id.full_name if rec.patient_id else 'Appointment'
+
+    @api.model
+    def create(self, vals):
+        if vals.get('code', 'New') == 'New':
+            vals['code'] = self.env['ir.sequence'].next_by_code('hospital.appointment') or '/'
+        return super().create(vals)
 
     def action_test(self):
         print("Button Clicked !")
@@ -42,21 +53,28 @@ class HospitalAppointment(models.Model):
         }
 
     # Control statusbar using buttons
-    def action_in_consultation(self):
+    def action_set_in_progress(self):
         for rec in self:
-            rec.state = 'in_consultation'
+            rec.stage = 'in_progress'
 
-    def action_done(self):
+    def action_set_done(self):
         for rec in self:
-            rec.state = 'done'
+            rec.stage = 'done'
 
-    def action_cancel(self):
+    def action_set_cancel(self):
         for rec in self:
-            rec.state = 'cancel'
+            rec.stage = 'cancel'
 
-    def action_draft(self):
+    def action_set_draft(self):
         for rec in self:
-            rec.state = 'draft'
+            rec.stage = 'draft'
+
+    # validation: can't unlink if done
+    def unlink(self):
+        for r in self:
+            if r.stage == 'done':
+                raise models.UserError("You cannot delete appointments in Done stage.")
+        return super().unlink()
 
 
 class AppointmentPharmacyLines(models.Model):

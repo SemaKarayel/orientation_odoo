@@ -17,14 +17,10 @@
         <field name="arch" type="xml">
             <activity string="Appointments">
                 <field name="patient_id"/>
-                <field name="ref"/>
                 <templates>
                     <div t-name="activity-box">
                         <img t-att-src="activity_image('hospital.patient', 'image', record.patient_id.raw_value)"
                              t-att-title="record.patient_id.value" t-att-alt="record.patient_id.value"/>
-                        <div>
-                            <field name="ref" display="full"/>
-                        </div>
                     </div>
                 </templates>
             </activity>
@@ -36,19 +32,19 @@
         <field name="name">hospital.appointment.tree</field>
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
-            <tree decoration-success="state =='done'" decoration-danger="state == 'cancel'" sample="1" multi_edit="1">
+            <tree decoration-success="stage =='done'" decoration-danger="stage == 'cancel'" sample="1" multi_edit="1">
                 <field name="patient_id"/>
+                <field name="full_name"/>
                 <field name="appointment_time"/>
-                <field name="ref" optional="hide"/>
                 <field name="gender" optional="hide"/>
-                <field name="doctor_id" widget="many2one_avatar_user"/>
+                <field name="doctor_ids" widget="many2many_tags"/>
                 <field name="booking_date" optional="show"/>
                 <field name="activity_ids" widget="list_activity"/>
-                <field name="state"
-                       decoration-success="state == 'done'"
-                       decoration-info="state == 'draft'"
-                       decoration-danger="state == 'cancel'"
-                       decoration-warning="state == 'in_consultation'"
+                <field name="stage"
+                       decoration-success="stage == 'done'"
+                       decoration-info="stage == 'draft'"
+                       decoration-danger="stage == 'cancel'"
+                       decoration-warning="stage == 'in_progress'"
                        widget="badge"/>
             </tree>
         </field>
@@ -63,21 +59,20 @@
             <form>
                 <header>
                     <!--Control statusbar using buttons-->
-                    <button name="action_in_consultation" string="In Consultation" class="oe_highlight"
+                    <button name="action_set_in_progress" string="In Progress" class="oe_highlight"
                             data-hotkey="y"
                             type="object" states="draft"/>
-                    <button name="action_done" string="Mark as Done" class="oe_highlight"
+                    <button name="action_set_done" string="Mark as Done" class="oe_highlight"
                             data-hotkey="v"
                             type="object" states="in_consultation"/>
-                    <button name="action_cancel" string="Cancel"
+                    <button name="action_set_cancel" string="Cancel"
                             data-hotkey="z"
                             type="object" states="draft,in_consultation"/>
-                    <button name="action_draft" string="Reset to Draft" class="oe_highlight"
+                    <button name="action_set_draft" string="Reset to Draft" class="oe_highlight"
                             data-hotkey="n"
                             type="object" states="cancel"/>
-                    <!--options="{'clickable': '1'}"-->
-                    <field name="state" widget="statusbar" nolabel="1"
-                           statusbar_visible="draft,in_consultation,done"/>
+                    <field name="stage" widget="statusbar" nolabel="1"
+                           statusbar_visible="draft,in_progress,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -87,10 +82,10 @@
                     </div>
                     <group>
                         <group>
+                            <field name="full_name"/>
                             <field name="patient_id"/>
-                            <field name="ref"/>
+                            <field name="doctor_ids" widget="many2many_tags"/>
                             <field name="gender"/>
-                            <field name="doctor_id" widget="many2one_avatar"/>
                             <field name="booking_date" help="Date of booking" default_focus="1"/>
                         </group>
                         <group>
