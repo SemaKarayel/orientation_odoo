@@ -36,7 +36,7 @@
         </field>
     </record>
 
-    <!--Menu Action-->
+    <!--Menu Action for Patient Tag-->
     <record id="action_patient_tag" model="ir.actions.act_window">
         <field name="name">Patient Tags</field>
         <field name="type">ir.actions.act_window</field>

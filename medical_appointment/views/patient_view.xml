@@ -81,7 +81,7 @@
         </field>
     </record>
 
-
+    <!--Menu Action for Patient-->
     <record id="action_hospital_patient" model="ir.actions.act_window">
         <field name="name">Patients</field>
         <field name="type">ir.actions.act_window</field>
