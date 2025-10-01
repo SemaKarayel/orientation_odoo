@@ -1,6 +1,5 @@
 from odoo import models, fields, api
 
-
 class HospitalAppointment(models.Model):
     _name = 'hospital.appointment'
     _description = 'Hospital Appointment'
@@ -13,35 +12,39 @@ class HospitalAppointment(models.Model):
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)
     doctor_ids = fields.Many2many('hospital.doctor', string='Doctors')
     patient_id = fields.Many2one('hospital.patient', string='Patient')
-    stage = fields.Selection([
+    state = fields.Selection([
         ('draft', 'Draft'),
         ('in_progress', 'In Progress'),
         ('done', 'Done'),
-        ('cancel', ' Cancelled')], default='draft', string='Stage', required=True, tracking=True)
+        ('cancel', 'Cancelled')],
+        default='draft', string='state', required=True, tracking=True)
     treatment_ids = fields.One2many('hospital.treatment', 'appointment_id', string='Treatments')
     priority = fields.Selection([
         ('0', 'Normal'),
         ('1', 'Low'),
         ('2', 'High'),
-        ('3', 'Very High')], string='Priority')
+        ('3', 'Very High')],
+        string='Priority')
     gender = fields.Selection(related='patient_id.gender')
     booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
     prescription = fields.Html(string='Prescription')
     pharmacy_line_ids = fields.One2many('appointment.pharmacy.lines', 'appointment_id', string='Pharmacy Lines')
     hide_sales_price = fields.Boolean(string='Hide Sales Price')
 
-    # Compute full name using patient
+    # Compute full name from patient
     @api.depends('patient_id.full_name')
     def _compute_full_name(self):
         for rec in self:
             rec.full_name = rec.patient_id.full_name if rec.patient_id else 'Appointment'
 
+    # Auto-generate code
     @api.model
     def create(self, vals):
         if vals.get('code', 'New') == 'New':
             vals['code'] = self.env['ir.sequence'].next_by_code('hospital.appointment') or '/'
         return super().create(vals)
 
+    # Test button
     def action_test(self):
         print("Button Clicked !")
         return {
@@ -52,28 +55,28 @@ class HospitalAppointment(models.Model):
             }
         }
 
-    # Control statusbar using buttons
-    def action_set_in_progress(self):
+    # state change buttons
+    def action_in_progress(self):
         for rec in self:
-            rec.stage = 'in_progress'
+            rec.state = 'in_progress'
 
-    def action_set_done(self):
+    def action_done(self):
         for rec in self:
-            rec.stage = 'done'
+            rec.state = 'done'
 
-    def action_set_cancel(self):
+    def action_cancel(self):
         for rec in self:
-            rec.stage = 'cancel'
+            rec.state = 'cancel'
 
-    def action_set_draft(self):
+    def action_draft(self):
         for rec in self:
-            rec.stage = 'draft'
+            rec.state = 'draft'
 
-    # validation: can't unlink if done
+    # Validation: cannot delete done appointments
     def unlink(self):
-        for r in self:
-            if r.stage == 'done':
-                raise models.UserError("You cannot delete appointments in Done stage.")
+        for rec in self:
+            if rec.state == 'done':
+                raise models.UserError("Cannot delete appointments in Done state.")
         return super().unlink()
 
 
