@@ -33,8 +33,8 @@
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
             <tree decoration-success="stage =='done'" decoration-danger="stage == 'cancel'" sample="1" multi_edit="1">
-                <field name="patient_id"/>
-                <field name="full_name"/>
+                <field name="full_name" attrs="{'readonly': [('stage','in',['done','cancel'])]}"/>
+                <field name="patient_id" attrs="{'readonly': [('stage','in',['done','cancel'])]}"/>
                 <field name="appointment_time"/>
                 <field name="gender" optional="hide"/>
                 <field name="doctor_ids" widget="many2many_tags"/>
@@ -82,8 +82,8 @@
                     </div>
                     <group>
                         <group>
-                            <field name="full_name"/>
-                            <field name="patient_id"/>
+                            <field name="full_name" attrs="{'readonly': [('stage','in',['done','cancel'])]}"/>
+                            <field name="patient_id" attrs="{'readonly': [('stage','in',['done','cancel'])]}"/>
                             <field name="doctor_ids" widget="many2many_tags"/>
                             <field name="gender"/>
                             <field name="booking_date" help="Date of booking" default_focus="1"/>
