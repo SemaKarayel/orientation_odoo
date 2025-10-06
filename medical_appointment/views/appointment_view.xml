@@ -48,14 +48,26 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_in_progress" string="In Progress" type="object"
-                            states="draft" class="oe_highlight"/>
-                    <button name="action_done" string="Mark as Done" type="object"
-                            states="in_progress" class="oe_highlight"/>
-                    <button name="action_cancel" string="Cancel" type="object"
-                            states="draft,in_progress"/>
-                    <button name="action_draft" string="Reset to Draft" type="object"
-                            states="cancel,done"/>
+                    <button name="action_in_progress" string="In Progress" class="oe_highlight"
+                            data-hotkey="x"
+                            type="object" state="draft"/>
+
+                    <button name="action_done" string="Mark as Done" class="oe_highlight"
+                            data-hotkey="v"
+                            type="object" states="in_progress"/>
+
+<!--                    <button name="%(medical_appointment.action_cancel_appointment)d" string="Cancel"-->
+<!--                            data-hotkey="z"-->
+<!--                            type="object" states="draft,in_progress"/>-->
+
+                    <button name="action_cancel" string="Cancel"
+                            data-hotkey="z"
+                            type="object" states="draft,in_progress"/>
+
+                    <button name="action_draft" string="Reset to Draft"
+                            data-hotkey="r"
+                            type="object" states="cancel,done"/>
+
                     <field name="state" widget="statusbar" nolabel="1"
                            statusbar_visible="draft,in_progress,done"/>
                 </header>
@@ -83,13 +95,15 @@
                             <field name="pharmacy_line_ids">
                                 <tree>
                                     <field name="product_id"/>
-                                    <field name="price_unit" attrs="{'column_invisible':[('parent.hide_sales_price','=',True)]}"/>
+                                    <field name="price_unit"
+                                           attrs="{'column_invisible':[('parent.hide_sales_price','=',True)]}"/>
                                     <field name="qty"/>
                                 </tree>
                                 <form>
                                     <group>
                                         <field name="product_id"/>
-                                        <field name="price_unit" attrs="{'column_invisible':[('parent.hide_sales_price','=',True)]}"/>
+                                        <field name="price_unit"
+                                               attrs="{'column_invisible':[('parent.hide_sales_price','=',True)]}"/>
                                         <field name="qty"/>
                                     </group>
                                 </form>
@@ -118,5 +132,6 @@
 
     <menuitem id="menu_appointment" name="Appointment"
               action="action_hospital_appointment"
-              parent="menu_appointment_master"/>
+              parent="menu_appointment_master"
+              sequence="10"/>
 </odoo>
