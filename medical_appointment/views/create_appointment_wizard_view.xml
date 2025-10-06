@@ -26,8 +26,4 @@
         <field name="target">new</field>
     </record>
 
-    <!-- menu under appointment master -->
-    <menuitem id="menu_create_appointment_wizard" parent="menu_appointment_master" name="Wizard: Create Appointment"
-              action="action_create_appointment_wizard"/>
-
 </odoo>
