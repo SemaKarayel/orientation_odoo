@@ -50,7 +50,7 @@
                 <header>
                     <button name="action_in_progress" string="In Progress" class="oe_highlight"
                             data-hotkey="x"
-                            type="object" state="draft"/>
+                            type="object" states="draft"/>
 
                     <button name="action_done" string="Mark as Done" class="oe_highlight"
                             data-hotkey="v"
