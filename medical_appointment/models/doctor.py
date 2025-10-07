@@ -26,7 +26,7 @@ class Doctor(models.Model):
         for rec in self:
             rec.full_name = f"{rec.first_name} {rec.last_name}"
 
-    # compute age
+    # compute age from birthdate
     @api.depends('date_of_birth')
     def _compute_age(self):
         for rec in self:
