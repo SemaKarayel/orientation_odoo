@@ -6,7 +6,6 @@ class CreateAppointmentWizard(models.TransientModel):
 
     patient_id = fields.Many2one('hospital.patient', string='Patient', required=True)
     doctor_ids = fields.Many2many('hospital.doctor', string='Doctors')
-    appointment_id = fields.Many2one('hospital.appointment', string='Appointment')
 
     def action_create_appointment(self):
         self.ensure_one()
