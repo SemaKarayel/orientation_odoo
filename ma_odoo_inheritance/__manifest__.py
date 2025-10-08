@@ -7,6 +7,8 @@
     'website': "http://www.yourcompany.com",
     'version': '0.1',
     'depends': ['sale'],
-    'data': [],
+    'data': [
+        'views/sale_order_view.xml'
+    ],
     'demo': [],
 }
