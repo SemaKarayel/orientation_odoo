@@ -48,15 +48,16 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <!-- State buttons: 'Draft','In Progress','Cancel','Done' -->
                     <button name="action_in_progress" string="In Progress" class="oe_highlight"
                             data-hotkey="x"
                             type="object" states="draft"/>
                     <button name="action_done" string="Mark as Done" class="oe_highlight"
                             data-hotkey="v"
                             type="object" states="in_progress"/>
-<!--                    <button name="%(medical_appointment.action_cancel_appointment)d" string="Cancel"-->
-<!--                            data-hotkey="z"-->
-<!--                            type="object" states="draft,in_progress"/>-->
+                    <!--                    <button name="%(medical_appointment.action_cancel_appointment)d" string="Cancel"-->
+                    <!--                            data-hotkey="z"-->
+                    <!--                            type="object" states="draft,in_progress"/>-->
                     <button name="action_cancel" string="Cancel"
                             data-hotkey="z"
                             type="object" states="draft,in_progress"/>
@@ -70,6 +71,21 @@
 
                 <!-- Sheet with readonly attrs for Done/Cancel -->
                 <sheet attrs="{'readonly':[('state','in',['done','cancel'])]}">
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_open_sale_orders"
+                                class="oe_stat_button" icon="fa-shopping-cart">
+                            <field string="Sale Orders" name="sale_orders_count" widget="statinfo"/>
+                        </button>
+                        <button type="object" name="action_open_invoices"
+                                class="oe_stat_button" icon="fa-file-text-o">
+                            <field string="Invoices" name="invoices_count" widget="statinfo"/>
+                        </button>
+                        <button type="object" name="action_open_payments"
+                                class="oe_stat_button" icon="fa-credit-card">
+                            <field string="Payments" name="payments_count" widget="statinfo"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="full_name"/>
@@ -112,7 +128,6 @@
                                 <tree editable="bottom">
                                     <field name="name"/>
                                     <field name="is_done"/>
-                                    <field name="appointment_id"/>
                                 </tree>
                             </field>
                         </page>
